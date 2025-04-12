@@ -19,7 +19,7 @@ dotenv.config()
 mongoose.connect(process.env.MONGO_URL)
 
 const app = express()
-const PORT = 6900
+const PORT = process.env.PORT || 6900
 
 app.use(cors())
 
