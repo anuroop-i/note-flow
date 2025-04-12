@@ -39,7 +39,7 @@ app.post('/api/create-account', async(req,res) => {
 
     const isUser = await User.findOne({email : email})
 
-    if (isUser) return res.json({error:true,message:"User Already Exists"})
+    if (isUser) return res.status(400).json({error:true,message:"User Already Exists"})
 
       const user = new User({
         fullName,
