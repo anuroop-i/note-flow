@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/NoteCard/NoteCard";
 
@@ -10,6 +10,8 @@ import axiosInstance from "../../utils/axiosInstance";
 import DeleteModal from "../../components/NoteModals/DeleteModal";
 
 const Home = () => {
+  const [loading,setLoading] = useState(true)
+
   const [notes, setNotes] = useState([]);               // for displaying notes
   const [toEditNote,setToEditNote] = useState("")       // Note which is to be edited
 
@@ -22,36 +24,36 @@ const Home = () => {
   const navigate = useNavigate()
 
   const getUserInfo = async() => {
-    try {
+  
       const response = await axiosInstance("/api/user-details")
       if(response.data && response.data.user){
         setUserInfo(response.data.user.fullName)             // Fullname of user
-      }
-    } catch (error) {
-      if(error.response){
-        localStorage.clear()
-        navigate("/login")
-      }
+      }      
     }
-  }
+  
 
   const getNotes = async() => {
-    try {
       const response = await axiosInstance("/api/get-all-notes")
-      if(response.data && response.data.notes)
+      if(response.data && response.data.notes){
       setNotes(response.data.notes)
-    } catch (error) {
-      if(error.response){
-        localStorage.clear()
-        navigate("/login")
       }
-    }
   }
-  useEffect(() => {
-    getUserInfo()
-    getNotes()
-    return () => {}
-  }, [])
+  
+  useLayoutEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getUserInfo();
+        await getNotes();
+        setLoading(false); 
+      } catch (error) {
+        localStorage.clear();
+        navigate("/login", { replace: true });
+      }
+    };
+  
+    fetchData();
+  }, []); 
+  
   
  
 
@@ -94,7 +96,9 @@ const Home = () => {
     setSearchQuery(query)
   }
 
+  
 
+  if (loading) return null
   return (
     <div>
       <Navbar userInfo={userInfo} onSearch={onSearch}/>

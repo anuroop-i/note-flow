@@ -13,6 +13,7 @@ const PasswordInput = ({value,onChange,placeholder}) => {
   return (
     <div className='flex items-center bg-transparent border-[1px] border-gray-400 rounded px-3 py-3 mb-3 '>
         <input
+        id='password'
         value={value}
         onChange={onChange}
         type={isShowPass? 'text' : 'password'}

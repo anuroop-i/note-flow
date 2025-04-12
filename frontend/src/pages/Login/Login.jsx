@@ -53,7 +53,7 @@ const Login = () => {
       <div className='w-100 border rounded  border-white bg-white p-8 drop-shadow-2xl'>
       <form onSubmit={handleLogin}>
         <h4 className='text-3xl text-center text-black mb-7 '>Login</h4>
-        <input type="text" placeholder='Email' className='input-box mb-6'
+        <input type="text" id='email' placeholder='Email' className='input-box mb-6'
         value={email}
         onChange={(e) => setEmail(e.target.value)} />
         

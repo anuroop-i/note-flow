@@ -22,7 +22,8 @@ const app = express()
 const PORT = process.env.PORT || 6900
 
 app.use(cors({
-  origin: "https://note-flow.onrender.com"
+  origin: process.env.FRONTEND_URL
+
 }));
 
 app.use(express.json())
