@@ -1,1 +1,1 @@
-export const BASE_URL = "http://localhost:6900"
+export const BASE_URL = "https://note-flow-api.onrender.com"
