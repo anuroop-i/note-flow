@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useLayoutEffect } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import PasswordInput from '../../components/PasswordInput/PasswordInput'
 import { Link , useNavigate } from 'react-router-dom'
@@ -7,12 +7,38 @@ import axiosInstance from '../../utils/axiosInstance'
 
 
 const SignUp = () => {
+  const [loading,setLoading] = useState(true)
   const [name,setName] = useState('')
   const [email,setEmail] = useState('')
   const [password,SetPassword] = useState('')
   const [error,setError] = useState(null)
 
   const navigate = useNavigate()
+
+  const getUserInfo = async() => { 
+    try {
+      const response = await axiosInstance("/api/user-details")
+      if(response.data && response.data.user){
+        navigate("/", { replace: true });            
+      }
+    } catch (error) {
+       setLoading(false)
+    }       
+  }
+    
+  
+  useLayoutEffect( () => {
+    const fetchData = async() => {
+      try {
+        await getUserInfo()
+          }
+      catch (error) {
+        localStorage.clear();
+        setLoading(false)
+        }
+    }
+    fetchData()
+      }, [])
 
   const handleSignUp = async(e) => {
     e.preventDefault()
@@ -52,7 +78,7 @@ const SignUp = () => {
     }
   }
 
-
+if (loading) return null
   return (
     <div>
       <Navbar />
